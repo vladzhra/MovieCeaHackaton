@@ -1,0 +1,70 @@
+
+> moviecea-web@1.0.0 lint
+> eslint .
+
+
+/home/zaharia/code/moviecea/web/src/App.tsx
+    1:21  error    'useCallback' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      @typescript-eslint/no-unused-vars
+    2:38  error    'useLocation' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      @typescript-eslint/no-unused-vars
+   24:3   error    'AccountCircle' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    @typescript-eslint/no-unused-vars
+  167:53  error    'queryError' is assigned a value but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              @typescript-eslint/no-unused-vars
+  173:9   warning  The 'movies' logical expression could make the dependencies of useMemo Hook (at line 180) change on every render. To fix this, wrap the initialization of 'movies' in its own useMemo() Hook                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 react-hooks/exhaustive-deps
+  173:9   warning  The 'movies' logical expression could make the dependencies of useMemo Hook (at line 185) change on every render. To fix this, wrap the initialization of 'movies' in its own useMemo() Hook                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 react-hooks/exhaustive-deps
+  188:5   error    Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+/home/zaharia/code/moviecea/web/src/App.tsx:188:5
+  186 |
+  187 |   useEffect(() => {
+> 188 |     setPage(1);
+      |     ^^^^^^^ Avoid calling setState() directly within an effect
+  189 |     setSelectedGenre(null);
+  190 |   }, [search]);
+  191 |  react-hooks/set-state-in-effect
+
+/home/zaharia/code/moviecea/web/src/AuthContext.tsx
+  22:7   error    Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+/home/zaharia/code/moviecea/web/src/AuthContext.tsx:22:7
+  20 |     const savedUser = localStorage.getItem('user');
+  21 |     if (savedToken && savedUser) {
+> 22 |       setToken(savedToken);
+     |       ^^^^^^^^ Avoid calling setState() directly within an effect
+  23 |       setUser(JSON.parse(savedUser));
+  24 |     }
+  25 |   }, []);  react-hooks/set-state-in-effect
+  50:14  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           react-refresh/only-export-components
+
+/home/zaharia/code/moviecea/web/src/MovieModal.tsx
+   2:17  error  'updateMovie' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      @typescript-eslint/no-unused-vars
+  72:7   error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+/home/zaharia/code/moviecea/web/src/MovieModal.tsx:72:7
+  70 |   useEffect(() => {
+  71 |     if (isEditing) {
+> 72 |       setEditData({
+     |       ^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  73 |         title: movie.title,
+  74 |         overview: movie.overview,
+  75 |         tagline: movie.tagline,  react-hooks/set-state-in-effect
+  95:14  error  'err' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              @typescript-eslint/no-unused-vars
+
+✖ 12 problems (9 errors, 3 warnings)
+
