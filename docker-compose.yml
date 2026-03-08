@@ -1,0 +1,64 @@
+services:
+  db:
+    image: postgres:18-alpine
+    container_name: moviecea-db
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U postgres -d moviesdb']
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  api:
+    build:
+      context: ./api
+    container_name: moviecea-api
+    environment:
+      PORT: ${PORT}
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      MOVIES_DUMP_PATH: ${MOVIES_DUMP_PATH}
+      JWT_SECRET: ${JWT_SECRET}
+    ports:
+      - '3000:3000'
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - ./movies_dump.json:/app/movies_dump.json:ro
+
+  web:
+    build:
+      context: ./web
+    container_name: moviecea-web
+    environment:
+      VITE_API_URL: ${VITE_API_URL}
+    ports:
+      - '5173:5173'
+    depends_on:
+      - api
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: moviecea-pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+    ports:
+      - "5050:80"
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  postgres_data:
